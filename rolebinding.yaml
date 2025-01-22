@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-pod-reader-binding
+  namespace: default # Or your namespace
+subjects:
+- kind: ServiceAccount
+  name: jenkins # Name of the service account
+  namespace: default # Or your namespace
+roleRef:
+  kind: Role
+  name: jenkins-pod-reader # Name of the role
+  apiGroup: rbac.authorization.k8s.io

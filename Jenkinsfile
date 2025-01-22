@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'maven' // Label of a Kubernetes pod template in Jenkins
+            inheritFrom 'maven-agent' // Label of a Kubernetes pod template in Jenkins
         }
     }
     environment {

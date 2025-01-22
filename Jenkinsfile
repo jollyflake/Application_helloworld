@@ -40,14 +40,14 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            agent { docker { image 'docker:latest' } } // Use the Docker agent
+            agent { dockerContainer { image 'docker:latest' } } // Use the Docker agent
             steps {
                 sh 'docker build -t jaijp/javaapp:latest .' // Build the image
                 sh 'docker images' // Optional: List images to verify
             }
         }
         stage('Push Docker Image') {
-            agent { docker { image 'docker:latest' } }
+            agent { dockerContainer { image 'docker:latest' } }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"

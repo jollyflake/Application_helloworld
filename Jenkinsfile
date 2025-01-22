@@ -11,14 +11,6 @@ pipeline {
                 echo 'Hello, World from Jenkins Pipeline!'
             }
         }
-        stage('Checkout') {
-            steps {
-                git branch: 'master', url: 'https://github.com/jollyflake/Application_helloworld.git' // Replace
-                script {
-                    BRANCH_NAME = env.BRANCH_NAME.replaceAll('/','-')
-                }
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn clean package' // Use Maven to build the project

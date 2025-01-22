@@ -1,5 +1,9 @@
 pipeline {
-    agent any // Run on any available agent
+    agent {
+        kubernetes {
+            label 'maven' // Label of a Kubernetes pod template in Jenkins
+        }
+    }
     environment {
         IMAGE_NAME = "jaijp/javaapp" // Replace
         IMAGE_TAG = "${BUILD_NUMBER}-${BRANCH_NAME}"

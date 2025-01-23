@@ -27,19 +27,21 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            agent { dockerContainer { image 'docker:27.5.1'} } // Use the Docker agent
+        stage('Docker Build') {
             steps {
-                sh 'docker build -t jaijp/javaapp:latest .' // Build the image
-                sh 'docker images' // Optional: List images to verify
+                script {
+                    dockerImage = docker.build("${DOCKER_REGISTRY}:${env.BUILD_NUMBER}")
+                }
             }
         }
-        stage('Push Docker Image') {
-            agent { dockerContainer { image '' } }
+        
+        stage('Docker Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-                    sh "docker push jaijp/javaapp:latest"
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
+                        dockerImage.push()
+                        dockerImage.push('latest')
+                    }
                 }
             }
         }

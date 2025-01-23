@@ -1,5 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:cli'
+            volumes {
+                hostPath(hostPath: '/var/run/docker.sock', containerPath: '/var/run/docker.sock')
+                    }
+                }
+            }
     environment {
         IMAGE_NAME = "jaijp/javaapp" // Replace
         IMAGE_TAG = "${BUILD_NUMBER}-${BRANCH_NAME}"
@@ -28,14 +35,7 @@ pipeline {
             }
         }
         stage('Docker Build') {
-            agent {
-                docker {
-                    image 'docker:cli'
-                    volumes {
-                        hostPath(hostPath: '/var/run/docker.sock', containerPath: '/var/run/docker.sock')
-                    }
-                }
-            }
+            
             steps {
                 script {
                     def imageName = "jaijp/javaapp"

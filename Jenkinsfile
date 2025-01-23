@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker {
+        dockerContainer {
             image 'docker:cli'
             volumes {
                 hostPath(hostPath: '/var/run/docker.sock', containerPath: '/var/run/docker.sock')

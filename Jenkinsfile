@@ -28,7 +28,7 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            agent { dockerContainer { image 'docker:20.10.24-dind'} } // Use the Docker agent
+            agent { dockerContainer { image 'docker:27.5.1-dind'} } // Use the Docker agent
             steps {
                 sh 'docker build -t jaijp/javaapp:latest .' // Build the image
                 sh 'docker images' // Optional: List images to verify

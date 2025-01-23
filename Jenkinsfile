@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         IMAGE_NAME = "jaijp/javaapp" // Replace
-        IMAGE_TAG = "${BUILD_NUMBER}-${BRANCH_NAME}"
+        
     }
     
     stages {

@@ -28,7 +28,11 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            agent { dockerContainer { image 'docker:cli' } } // Use the Docker agent
+            agent { dockerContainer { image 'docker:20.10.24-dind'
+            privileged true
+                    volumes {
+                        hostPath(hostPath: '/var/run/docker.sock', containerPath: '/var/run/docker.sock')
+                    } } } // Use the Docker agent
             steps {
                 sh 'docker build -t jaijp/javaapp:latest .' // Build the image
                 sh 'docker images' // Optional: List images to verify

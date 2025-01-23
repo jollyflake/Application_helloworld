@@ -28,20 +28,27 @@ pipeline {
             }
         }
         stage('Docker Build') {
-            steps {
-                script {
-                    dockerImage = docker.build("${DOCKER_REGISTRY}:${env.BUILD_NUMBER}")
+            agent {
+                dockerContainer {
+                    image 'docker:cli'
+                    volumes {
+                        hostPath(hostPath: '/var/run/docker.sock', containerPath: '/var/run/docker.sock')
+                    }
                 }
             }
-        }
-        
-        stage('Docker Push') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
-                        dockerImage.push()
-                        dockerImage.push('latest')
-                    }
+                    def imageName = "jaijp/javaapp"
+                    def imageTag = "${env.BUILD_NUMBER}-${env.BRANCH_NAME}"
+
+                    sh "docker build -t ${imageName}:${imageTag} ."
+
+                    sh "docker tag ${imageName}:${imageTag} ${imageName}:latest"
+                    sh "docker login -u jaijp -p JAI1234jai"
+                    sh "docker push ${imageName}:${imageTag}"
+                    sh "docker push ${imageName}:latest"
+
+                    echo "Built and pushed Docker image: ${imageName}:${imageTag}"
                 }
             }
         }

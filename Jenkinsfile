@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Docker Build') {
             agent {
-                dockerContainer {
+                docker {
                     image 'docker:cli'
                     volumes {
                         hostPath(hostPath: '/var/run/docker.sock', containerPath: '/var/run/docker.sock')

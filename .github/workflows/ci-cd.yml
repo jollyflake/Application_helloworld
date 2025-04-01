@@ -1,3 +1,6 @@
+# .github/workflows/ci-cd.yml
+name: CI/CD Pipeline
+
 on:
   push:
     branches: [ main ]
@@ -7,32 +10,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Python (if applicable)
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies (if applicable)
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run tests (if applicable)
-      run: python manage.py test
+      - name: Run tests
+        run: python -m unittest discover
 
-    - name: Build Docker image
-      run: docker build -t ${{ github.repository }}:${{ github.sha }} .
-
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Push Docker image to Docker Hub
-      run: docker push ${{ github.repository }}:${{ github.sha }}
+      - name: Build and push Docker image
+        if: github.ref == 'refs/heads/main' # Only build and push on main branch
+        env:
+          DOCKER_REGISTRY: docker.io
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+          IMAGE_NAME: ${{ env.DOCKER_USERNAME }}/your-repository-name
+        run: |
+          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY
+          docker build -t $IMAGE_NAME:latest .
+          docker push $IMAGE_NAME:latest
+          docker logout $DOCKER_REGISTRY

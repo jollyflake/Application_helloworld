@@ -28,7 +28,7 @@ jobs:
           DOCKER_REGISTRY: docker.io
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
-          IMAGE_NAME: ${{ env.DOCKER_USERNAME }}/webapp
+          IMAGE_NAME: jaijp/webapp
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY
           docker build -t $IMAGE_NAME:latest .

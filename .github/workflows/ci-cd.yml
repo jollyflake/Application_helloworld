@@ -6,12 +6,22 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      build_command:
+        description: 'Command to execute for building the project'
+        required: true
+        default: 'echo "No build command provided"'
+      working_directory:
+        description: 'Optional working directory for the build command'
+        required: false
+        default: '.'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4

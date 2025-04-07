@@ -3,9 +3,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ feature ]
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
         run: python -m unittest discover
 
       - name: Build and push Docker image
-        if: github.ref == 'refs/heads/main' # Only build and push on main branch
+        if: github.ref == 'refs/heads/master' # Only build and push on main branch
         env:
           DOCKER_REGISTRY: docker.io
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

@@ -30,7 +30,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
           IMAGE_NAME: jaijp/webapp
         run: |
-          docker login -u "$secrets.DOCKER_USERNAME" -p "$secrets.DOCKER_PASSWORD" $DOCKER_REGISTRY
+          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY
           docker build -t jaijp/webapp:latest .
           docker push jaijp/webapp:latest
           docker logout $DOCKER_REGISTRY

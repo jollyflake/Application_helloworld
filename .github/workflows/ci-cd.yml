@@ -1,6 +1,23 @@
 name: CI/CD Pipeline
 
 on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Choose the build type'
+        required: true
+        type: choice
+        options:
+          - Build Only
+          - Build and Test
+      java_version:
+        description: 'Select Java version'
+        required: true
+        type: choice
+        options:
+          - '17'
+          - '21'
+    
   push:
     branches: [ feature ]
   pull_request:

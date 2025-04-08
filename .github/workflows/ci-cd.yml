@@ -38,35 +38,3 @@ jobs:
           docker build -t jaijp/webapp:latest .
           docker push jaijp/webapp:latest
           docker logout $DOCKER_REGISTRY
-  deploy:
-    name: Deploy to Kubernetes
-    needs: 
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          install-location: '/usr/local/bin'
-
-      - name: Configure Kubernetes Cluster
-        run: |
-          echo "${{ env.KUBECONFIG_SECRET }}" | base64 -d > kubeconfig.yaml
-          export KUBECONFIG=$(pwd)/kubeconfig.yaml
-
-      - name: Set image tag in Kubernetes Deployment
-        run: |
-          kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${{ env.IMAGE_NAME }}=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -n ${{ env.K8S_NAMESPACE }}
-
-      # Optional: Apply other Kubernetes manifests (e.g., for ConfigMaps, Secrets)
-      # - name: Apply Kubernetes Manifests
-      #   run: kubectl apply -f k8s/ -n ${{ env.K8S_NAMESPACE }}
-
-      - name: Check Deployment Rollout Status
-        run: kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }} -n ${{ env.K8S_NAMESPACE }} --timeout=5m
-
-      - name: Check Pod Status
-        run: kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l app=${{ env.DEPLOYMENT_NAME }}

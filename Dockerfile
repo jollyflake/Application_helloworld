@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows:20H2
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2022
 
 MAINTAINER Jai Prakash < jp1999jai at gmail dot com >
 

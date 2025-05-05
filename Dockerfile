@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows:ltsc2022
+FROM redhat/ubi8-minimal
 
 MAINTAINER Jai Prakash < jp1999jai at gmail dot com >
 

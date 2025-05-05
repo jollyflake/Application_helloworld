@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
+FROM mcr.microsoft.com/windows:20H2
 
 MAINTAINER Jai Prakash < jp1999jai at gmail dot com >
 

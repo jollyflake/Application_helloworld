@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows
+FROM mcr.microsoft.com/windows:11
 
 MAINTAINER Jai Prakash < jp1999jai at gmail dot com >
 
